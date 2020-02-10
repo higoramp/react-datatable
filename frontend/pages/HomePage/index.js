@@ -74,7 +74,9 @@ class HomePage extends React.Component {
         return (
             <Container>
             
-            <DatatableResponsive limit={5} columns={columns} data={this.lazyData}/>
+            <DatatableResponsive limit={5} columns={columns} data={this.lazyData} patternLabel="Mostrando de ${start+1} até ${end} de ${length} usuários "
+                orderBy={[{value: "idasc", label:"Id asc"}, {value: "nameasc", label:"Nome asc"}]}
+            />
             
             </Container>
         );

@@ -22,10 +22,38 @@ const ButtonStyle = styled.div`
     }
 
 `
+const ActionsList = styled.ul`
+    &{
+        position: absolute;
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0px;
+        background-color: white;
+        box-sizing: border-box;
+        box-shadow: 1px 1px 3px #333, 0px 0px 8px #33333350;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        text-align: center;
+        
+    }
+    & li {
+        text-decoration: none;
+        list-style: none;
+        padding: 10px;
+        border-bottom: 1px solid #33333310;
+}
+
+        
+    }
+
+    
+`
+
 function Button(props){
     const styleButton = {
         color: props.color,
         backgroundColor: props.backgroundColor || "#00796B",
+        fontSize: props.fontSize
     }
     
 
@@ -33,4 +61,18 @@ function Button(props){
 
 }
 
+function DropdownButton(props){
+    let actions = props.actions || [];
+    
+    return (<div style={{textAlign: "right", position: "absolute", display: "inline-block", ...props.style}}>
+        <Button onClick={(event)=>props.onClick(props.value)} label={props.label} color={props.color} fontSize={props.fontSize}/>
+        <ActionsList>
+        {actions.map((action)=>{
+            return (<li><a onClick={(event)=>props.onClick(action.value)}>{action.label}</a></li>);
+        })}
+        </ActionsList>
+    </div>);
+}
+
 export default Button;
+export {DropdownButton};
