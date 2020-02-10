@@ -1,7 +1,0 @@
-{
-	"pages": [{
-		"name": "SignIn",
-        "route": "/signin",
-        "path": "frontend/pages/SignIn"
-	}]
-}

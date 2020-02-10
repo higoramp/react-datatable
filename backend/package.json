@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "prestart": "koji-tools watch &",
-    "start": "NODE_ENV=production node src/index.js",
+    "start": "hotel run 'json-server --watch db.json --port 3001 --host 0.0.0.0'",
     "dev": "NODE_ENV=development nodemon src/index.js",
     "test": "echo Test"
   },
@@ -16,6 +16,7 @@
     "body-parser": "^1.19.0",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
+    "hotel": "^0.8.7",
     "isomorphic-fetch": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "koji-tools": "^0.5.1",
