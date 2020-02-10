@@ -44,7 +44,7 @@ const ButtonPage = styled.button`
 &.disabled {
   opacity: 0.2;
 }
-&:not(.disabled):hover{
+&:not(.disabled):not(.selected):hover{
   transform: scale(1.1);
 }
 
@@ -115,6 +115,8 @@ function DatatableResponsive(props) {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(props.limit||10);
   const [data, setData] = useState([]);
+  const [order, setOrder] = useState({by: (props.orderby||"name"), asc: true});
+
   //pegando as chaves das colunas
   let columnsKeys = Object.keys(props.columns);
   //Separando apenas o que é importante para o estilo css, ou seja HideMobile, hideDEsktop e style
@@ -130,6 +132,11 @@ function DatatableResponsive(props) {
         setData(dataLoaded);
     });
   }, [page])
+
+  useEffect(()=>{
+    console.log("DATA PROPS", order);
+    props.data.sort(order.by, order.asc);
+  }, [order]);
   
   return (
     <Table>
@@ -233,26 +240,36 @@ function NavigatorPages (props){
 
 class LazyDataFetch {
 
-  constructor (urlFetch, processData=(data)=>new Array(...data)){
+  constructor (urlFetch, processData=(data)=>new Array(...data), order, asc){
     this.urlFetch = urlFetch;
     this.processData= processData;
     this.data = [];
+    this.order = order;
+    this.asc = asc;
+    this.updateList = false;
   }
   slice(start, end){
 
     return new Promise((resolve, reject)=>{
+      
+      let newStart = start;
+      if (this.updateList){
+          //Desconsidera o que já foi feito o fetch
+          this.data=[];
+          this.updateList = false;
+          newStart= 0;
+      }
       if(end<=this.data.length){
         //Retornando do "cache"
         return resolve(this.data.slice(start, end));
       }else{
-        return fetch(`${this.urlFetch}?_start=${start}&_end=${end}`)
+        return fetch(`${this.urlFetch}?_start=${newStart}&_end=${end}${this.order?('&_sort='+this.order):''}${this.asc?('&_asc='+this.asc):''}`)
           .then((response) => response.json())
           .then((users) => {
               console.log("DATA ANTES", this.data);
-              console.log("DATA", start+":"+(end-start));
-		    this.data.splice(start, (end-start), ...this.processData(users));
+		    this.data.splice(newStart, (end-newStart), ...this.processData(users));
             console.log("DATA", this.data);
-            return resolve(this.data.slice(start, end));
+            return resolve(this.data.slice(start, end));//Retorna apenas o que foi pedido
           })
           .catch(err => {
               console.log('Fetch Error: ', err);
@@ -261,6 +278,15 @@ class LazyDataFetch {
       }
     });
     
+      
+  }
+
+  sort(order, asc){
+    if(this.order!=order||this.asc!=asc){
+        this.order=order;
+        this.asc= asc;
+        this.updateList = true; //Para manter o controle dos dados que possui em "cache"
+    }
       
   }
 
