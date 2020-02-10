@@ -4,7 +4,7 @@
   "description": "Backend that runs koji-react-oauth template",
   "main": "src/index.js",
   "scripts": {
-    "start": "hotel run 'json-server --watch db.json --port 3001 --host 0.0.0.0'",
+    "start": "NODE_ENV=production hotel run 'json-server --watch db.json --port 3001 --host 0.0.0.0'",
     "dev": "hotel run 'json-server --watch db.json --port 3001 --host 0.0.0.0'",
     "test": "echo Test"
   },
