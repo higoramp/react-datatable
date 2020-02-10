@@ -22,6 +22,33 @@ const Table = styled.div`
   width: 100%;
 
 `
+const ButtonPage = styled.button`
+&{
+    width: 40px;
+    height: 40px;
+    background-color: #aae4de8a;
+    border: none;
+    outline: none;
+    margin: 5px;
+    box-shadow: 0px 0px 5px #333333;
+    border-radius: 5px;
+    color: white;
+    transition: all 0.5;
+}
+
+&:hover{
+  transform: scale(1.1);
+}
+
+&:active {
+  transform: scale(0.9);
+}
+`
+const NavigatorPagesStyle = styled.div`
+margin-top: 10px;
+
+
+`
 const ConditionalDisplayWrapper = styled.div`
   padding: 20px;
   display: ${props=> props.hideMobile?'none':'grid'};
@@ -74,11 +101,15 @@ const TableHeader = styled(TableRow)`
 
 function DatatableResponsive(props) {
 
-  //getting the key values of columns
+  const [page, setPage] = useState(0);
+  const [limit, setLimit] = useState(props.limit||10);
+  //pegando as chaves das colunas
   let columnsKeys = Object.keys(props.columns);
+  //Separando apenas o que é importante para o estilo css, ou seja HideMobile, hideDEsktop e style
   let columnsStyles = Object.entries(props.columns).map(elem=>(({ hideMobile, hideDesktop, style }) => ({ hideMobile, hideDesktop, style: style||{}}))(elem[1]));
-
-  //For performance purposes, since all rows should be with same columns props
+  //Pegando apenas os valores que serão mostrados
+  let start=page*limit;
+  let end =(page+1)*limit;
 
   return (
     <Table>
@@ -97,8 +128,8 @@ function DatatableResponsive(props) {
 
     <TableBody>
         
-        {props.data.map((item, index)=>{
-
+        {props.data.slice(start, end).map((item, index)=>{
+          
 
             return (
          
@@ -128,7 +159,7 @@ function DatatableResponsive(props) {
             
         })}
     </TableBody>
-
+    <NavigatorPages npages={4}></NavigatorPages>
     </Table>
   );
 }
@@ -147,6 +178,16 @@ function DefaultTableElement(props){
 
     return (<span key={props.value} style={styleDefaultElement}>{props.value}</span>);
 
+}
+
+function NavigatorPages (props){
+  let buttons = [];
+
+  for (let i=0;i<props.npages;i++){
+    buttons.push((<ButtonPage>{i+1}</ButtonPage>));
+  }
+
+  return (<NavigatorPagesStyle><ButtonPage>{"<"}</ButtonPage>{buttons}<ButtonPage>{">"}</ButtonPage></NavigatorPagesStyle>);
 }
 
 export default DatatableResponsive;
