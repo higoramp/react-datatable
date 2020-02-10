@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import './style.css';
 
@@ -126,6 +126,7 @@ function DatatableResponsive(props) {
   const [limit, setLimit] = useState(props.limit||10);
   const [data, setData] = useState([]);
   const [order, setOrder] = useState({by: (props.orderby||"id"), asc: true});
+  const detailBox = useRef();
 
   //pegando as chaves das colunas
   let columnsKeys = Object.keys(props.columns);

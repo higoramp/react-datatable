@@ -7,7 +7,7 @@ function IconLabel(props){
         color: props.color,
         fontWeight: props.fontWeight
     }
-    return (<span style={styleDefaultElement}>{(props.icon?props.icon():'')} <span key={props.value} style={{marginLeft: "2px"}}>{props.value}</span></span>);
+    return (<span style={styleDefaultElement}>{(props.icon?props.icon():'')} <span key={props.value} style={{marginLeft: "2px", ...props.style}}>{props.value}</span></span>);
 
 }
 

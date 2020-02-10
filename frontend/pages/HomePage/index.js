@@ -10,6 +10,8 @@ import DatatableResponsive, {LazyDataFetch} from '../../components/DatatableResp
 
 import Button from '../../components/Button.js';
 
+import DetailBox from '../../components/DetailBox.js';
+
 
 const users = require('../../data/users.json');
 
@@ -79,7 +81,7 @@ class HomePage extends React.Component {
                 orderBy={[{value: {by: "id", asc: true}, label:"Id crescente"}, {value: {by: "name", asc: true}, label:"Nome crescente"}]}
             />
             
-            
+            <DetailBox user={users[0]}/>
             </Container>
         );
     }
