@@ -10,6 +10,7 @@ import DatatableResponsive, {LazyDataFetch} from '../../components/DatatableResp
 
 import Button from '../../components/Button.js';
 
+
 const users = require('../../data/users.json');
 
 import {processDataUsers} from '../../common/Utils.js';
@@ -77,6 +78,7 @@ class HomePage extends React.Component {
             <DatatableResponsive limit={5} columns={columns} data={this.lazyData} patternLabel="Mostrando de ${start+1} até ${end} de ${length} usuários "
                 orderBy={[{value: {by: "id", asc: true}, label:"Id crescente"}, {value: {by: "name", asc: true}, label:"Nome crescente"}]}
             />
+            
             
             </Container>
         );
