@@ -63,14 +63,9 @@ class HomePage extends React.Component {
         };
     }
     componentDidMount() {
-        // Force an update of the dom on prop changes
-        // This is just for development situations so
-        // that we can test prop changes in real-time.
-        Koji.on('change', () => {
-            this.forceUpdate();
-        })
+
         console.log("CONFIG", Koji.config);
-        fetch(`${Koji.config.serviceMap.backend}/users?_start=0&_limit=5`)
+        fetch(`${Koji.config.serviceMap.backend}/users`)
         .then((response) => response.json())
         .then((users) => {
             this.setState({displayUsers: processDataUsers(users)});
@@ -84,7 +79,7 @@ class HomePage extends React.Component {
         return (
             <Container>
             
-            <DatatableResponsive columns={columns} data={this.state.displayUsers}/>
+            <DatatableResponsive limit={5} columns={columns} data={this.state.displayUsers}/>
             
             </Container>
         );
