@@ -38,25 +38,15 @@ const Container = styled.div`
 
 
 
-function detalhes(id){
-  console.log("CALLBACK", id);
-}
-//Escondendo firstname, lastname e email pq será mostrado na coluna detailUser
-const columns={
-    id: {label: "Id",  style:{ color: "var(--primary-text-color)", fontWeight: "bold", size: "minmax(0,60px)", justify: "center"}},
-    firstName: {label: "Nome", hideMobile: true},
-    lastName: {label: "Sobrenome", hideMobile: true},
-    email: {label: "Email", hideMobile: true, style: { justify: "left", size: "minmax(0, 1.5fr)", icon: MailIcon}, renderFunc: IconLabel},
-    acao: {label: "Ação", hideMobile: true,  composite: {id: {style:{size: "minmax(0, 0.5fr)", color: "white"}, renderFunc: (props)=>Button({...props, label: "Detalhes", onClick: detalhes})}}},
-    detailUser: {label: "Detail",  composite: {name: {label: "Nome completo", renderFunc: IconLabel, style: {icon: PersonIcon}}, email: "email"}, hideDesktop: true, style:{size: 'minmax(280px,1fr)'}}
-}
+
 const limitPage = 5;
 console.log(users.length);
 const userMapped = users.map(user=>(({id, name, email})=>({id, name, firstName: name.split(" ")[0], lastName: name.split(" ")[1], email}))(user));
 console.log("users:",userMapped);
 
 class HomePage extends React.Component {
-
+  
+    
 
     constructor(props){
         super(props);
@@ -65,7 +55,22 @@ class HomePage extends React.Component {
 
         };
         this.lazyData= new LazyDataFetch(`${Koji.config.serviceMap.backend}/users`, processDataUsers);
+        this.columns={
+            id: {label: "Id",  style:{ color: "var(--primary-text-color)", fontWeight: "bold", size: "minmax(0,60px)", justify: "center"}},
+            firstName: {label: "Nome", hideMobile: true},
+            lastName: {label: "Sobrenome", hideMobile: true},
+            email: {label: "Email", hideMobile: true, style: { justify: "left", size: "minmax(0, 1.5fr)", icon: MailIcon}, renderFunc: IconLabel},
+            acao: {label: "Ação", hideMobile: true,  composite: {id: {style:{size: "minmax(0, 0.5fr)", color: "white"}, renderFunc: (props)=>Button({...props, label: "Detalhes", onClick: this.detalhes.bind(this)})}}},
+            detailUser: {label: "Detail",  composite: {name: {label: "Nome completo", renderFunc: IconLabel, style: {icon: PersonIcon}}, email: "email"}, hideDesktop: true, style:{size: 'minmax(280px,1fr)'}}
+        }
+
+        this.detailBox = React.createRef();
     }
+
+    detalhes(id){
+      console.log("CALLBACK", this.detailBox.current);
+    }
+
     componentDidMount() {
 
         console.log("CONFIG", Koji.config);
@@ -77,11 +82,11 @@ class HomePage extends React.Component {
         return (
             <Container>
             
-            <DatatableResponsive limit={5} columns={columns} data={this.lazyData} patternLabel="Mostrando de ${start+1} até ${end} de ${length} usuários "
+            <DatatableResponsive limit={5} columns={this.columns} data={this.lazyData} patternLabel="Mostrando de ${start+1} até ${end} de ${length} usuários "
                 orderBy={[{value: {by: "id", asc: true}, label:"Id crescente"}, {value: {by: "name", asc: true}, label:"Nome crescente"}]}
             />
             
-            <DetailBox user={users[0]}/>
+            <DetailBox ref={this.detailBox} user={users[0]}/>
             </Container>
         );
     }
