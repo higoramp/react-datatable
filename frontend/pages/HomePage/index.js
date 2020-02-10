@@ -61,7 +61,7 @@ class HomePage extends React.Component {
             displayUsers: []
 
         };
-        this.lazyData= new LazyDataFetch(`${Koji.config.serviceMap.backend}/users`);
+        this.lazyData= new LazyDataFetch(`${Koji.config.serviceMap.backend}/users`, processDataUsers);
     }
     componentDidMount() {
 
@@ -74,7 +74,9 @@ class HomePage extends React.Component {
         return (
             <Container>
             
-            <DatatableResponsive limit={5} columns={columns} data={this.lazyData}/>
+            <DatatableResponsive limit={5} columns={columns} data={this.lazyData} patternLabel="Mostrando de ${start+1} até ${end} de ${length} usuários "
+                orderBy={[{value: {by: "id", asc: true}, label:"Id crescente"}, {value: {by: "name", asc: true}, label:"Nome crescente"}]}
+            />
             
             </Container>
         );

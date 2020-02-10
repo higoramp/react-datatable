@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import './style.css';
 
+import {DropdownButton} from './Button.js';
+
 
 const TableBody = styled.div`
     
     &{
         width: 100%;
         border-radius: 5px;
-
+       
         @media(min-width: 600px) {
             overflow: hidden;
             background-color: #FFFFFF;
@@ -20,6 +22,7 @@ const TableBody = styled.div`
 `
 const Table = styled.div`
   width: 100%;
+   position: relative;
 
 `
 const ButtonPage = styled.button`
@@ -107,6 +110,13 @@ const TableHeader = styled(TableRow)`
 
 `
 
+const TotalLabel = styled.div`
+  text-align: left;
+  color: white;
+  font-size: var(--label-font-size);
+  margin-top: 5px;
+`
+
 
 
 
@@ -115,7 +125,7 @@ function DatatableResponsive(props) {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(props.limit||10);
   const [data, setData] = useState([]);
-  const [order, setOrder] = useState({by: (props.orderby||"name"), asc: true});
+  const [order, setOrder] = useState({by: (props.orderby||"id"), asc: true});
 
   //pegando as chaves das colunas
   let columnsKeys = Object.keys(props.columns);
@@ -124,23 +134,34 @@ function DatatableResponsive(props) {
   //Pegando apenas os valores que serão mostrados
   let start=page*limit;
   let end =(page+1)*limit;
-  //Criando uma promessa para tratar tanto listas normais, como a LazyList da mesma maneira
-  useEffect(()=>{
-      console.log("DATA PROPS", props.data.data);
+  let length = props.data.length;
+
+  let patternLabel = props.patternLabel ||"Showing ${start+1} of ${end} of ${length} results";
+
+  function atualizaData(){
       Promise.resolve(props.data.slice(start, end)).then((dataLoaded)=>{
         console.log("SET DATA", dataLoaded);
         setData(dataLoaded);
     });
+  }
+  //Criando uma promessa para tratar tanto listas normais, como a LazyList da mesma maneira
+  useEffect(()=>{
+      console.log("DATA PROPS", props.data.data);
+    atualizaData();
   }, [page])
 
   useEffect(()=>{
     console.log("DATA PROPS", order);
     props.data.sort(order.by, order.asc);
+    atualizaData();
   }, [order]);
   
+
+  console.log("RENDER TABLE");
   return (
     <Table>
-    
+        {props.orderBy?(<DropdownButton color="var(--label-font-color)" label="Select an order" fontSize="0.7rem" actions={props.orderBy} 
+                style={{right: "0px"}} onClick={(order)=>setOrder(order)}/>):''}
         <TableHeader columns={columnsStyles}>
             {columnsKeys.map((columnHeader)=>{
 
@@ -186,6 +207,7 @@ function DatatableResponsive(props) {
             
         })}
     </TableBody>
+    <TotalLabel>{eval("`"+patternLabel+"`")}</TotalLabel>
     <NavigatorPages npages={4} onClick={(page)=>setPage(page)}></NavigatorPages>
     </Table>
   );
@@ -238,6 +260,21 @@ function NavigatorPages (props){
   </NavigatorPagesStyle>);
 }
 
+function OrderBy (props){
+  let buttons = [];
+  const [selected, setSelected] = useState(0);
+  useEffect(()=>{
+    props.onClick(selected);
+  });
+
+
+
+  return (<NavigatorPagesStyle>
+    <ButtonPage className={selected<=0?'disabled':''} onClick={(event)=>changePage("previous")}>{"<"}</ButtonPage>{buttons}
+    <ButtonPage className={selected>=(props.npages-1)?'disabled':''} onClick={(event)=>changePage("next")}>{">"}</ButtonPage>
+  </NavigatorPagesStyle>);
+}
+
 class LazyDataFetch {
 
   constructor (urlFetch, processData=(data)=>new Array(...data), order, asc){
@@ -247,6 +284,7 @@ class LazyDataFetch {
     this.order = order;
     this.asc = asc;
     this.updateList = false;
+    this.length=0;
   }
   slice(start, end){
 
@@ -264,7 +302,9 @@ class LazyDataFetch {
         return resolve(this.data.slice(start, end));
       }else{
         return fetch(`${this.urlFetch}?_start=${newStart}&_end=${end}${this.order?('&_sort='+this.order):''}${this.asc?('&_asc='+this.asc):''}`)
-          .then((response) => response.json())
+          .then((response) => {
+            this.length=response.headers.get("x-total-count");
+            return response.json();})
           .then((users) => {
               console.log("DATA ANTES", this.data);
 		    this.data.splice(newStart, (end-newStart), ...this.processData(users));
