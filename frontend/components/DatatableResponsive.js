@@ -114,6 +114,7 @@ function DatatableResponsive(props) {
 
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(props.limit||10);
+  const [data, setData] = useState([]);
   //pegando as chaves das colunas
   let columnsKeys = Object.keys(props.columns);
   //Separando apenas o que é importante para o estilo css, ou seja HideMobile, hideDEsktop e style
@@ -121,7 +122,14 @@ function DatatableResponsive(props) {
   //Pegando apenas os valores que serão mostrados
   let start=page*limit;
   let end =(page+1)*limit;
-
+  //Criando uma promessa para tratar tanto listas normais, como a LazyList da mesma maneira
+  useEffect(()=>{
+      console.log("DATA PROPS", props.data.data);
+      Promise.resolve(props.data.slice(start, end)).then((dataLoaded)=>{
+        console.log("SET DATA", dataLoaded);
+        setData(dataLoaded);
+    });
+  }, [page])
   
   return (
     <Table>
@@ -140,7 +148,7 @@ function DatatableResponsive(props) {
 
     <TableBody>
         
-        {props.data.slice(start, end).map((item, index)=>{
+        {data.map((item, index)=>{
           
 
             return (
@@ -223,5 +231,40 @@ function NavigatorPages (props){
   </NavigatorPagesStyle>);
 }
 
+class LazyDataFetch {
+
+  constructor (urlFetch, processData=(data)=>new Array(...data)){
+    this.urlFetch = urlFetch;
+    this.processData= processData;
+    this.data = [];
+  }
+  slice(start, end){
+
+    return new Promise((resolve, reject)=>{
+      if(end<=this.data.length){
+        //Retornando do "cache"
+        return resolve(this.data.slice(start, end));
+      }else{
+        return fetch(`${this.urlFetch}?_start=${start}&_end=${end}`)
+          .then((response) => response.json())
+          .then((users) => {
+              console.log("DATA ANTES", this.data);
+              console.log("DATA", start+":"+(end-start));
+		    this.data.splice(start, (end-start), ...this.processData(users));
+            console.log("DATA", this.data);
+            return resolve(this.data.slice(start, end));
+          })
+          .catch(err => {
+              console.log('Fetch Error: ', err);
+              return reject(err);
+          });
+      }
+    });
+    
+      
+  }
+
+}
 
 export default DatatableResponsive;
+export {LazyDataFetch};
