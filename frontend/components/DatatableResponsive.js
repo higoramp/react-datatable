@@ -121,7 +121,10 @@ function DatatableResponsive(props) {
   //Pegando apenas os valores que serão mostrados
   let start=page*limit;
   let end =(page+1)*limit;
-
+  //Criando uma promessa para tratar tanto listas normais, como a LazyList da mesma maneira
+  let data = Promise.resolve(props.data.slice(start, end)).then(
+    
+  )
   
   return (
     <Table>
@@ -223,5 +226,36 @@ function NavigatorPages (props){
   </NavigatorPagesStyle>);
 }
 
+class LazyDataFetch {
+
+  constructor (urlFetch, processData=(data)=>data){
+    this.urlFetch = urlFetch;
+    this.processData= processData;
+    this.data = [];
+  }
+  slice(start, end){
+
+    return new Promise((resolve, reject)=>{
+      if(end<=this.data.length){
+        //Retornando do "cache"
+        return resolve(this.data.slice(start, end));
+      }else{
+        return fetch(`${this.urlFetch}?_start=${start}&_end=${end}`)
+          .then((response) => response.json())
+          .then((users) => {
+		    this.data.splice(start, (end-start), ...this.processData(users));
+            return resolve(this.data);
+          })
+          .catch(err => {
+              console.log('Fetch Error: ', err);
+              return reject(err);
+          });
+      }
+    });
+    
+      
+  }
+
+}
 
 export default DatatableResponsive;
