@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import Koji from '@withkoji/vcc';
 
 import IconLabel from '../../components/IconLabel.js';
@@ -11,6 +11,8 @@ import DatatableResponsive from '../../components/DatatableResponsive.js';
 import Button from '../../components/Button.js';
 
 const users = require('../../data/users.json');
+
+import {processDataUsers} from '../../common/Utils.js';
 
 const Container = styled.div`
  :root{
@@ -45,12 +47,21 @@ const columns={
     acao: {label: "Ação", hideMobile: true,  composite: {id: {style:{size: "minmax(0, 0.5fr)", color: "white"}, renderFunc: (props)=>Button({...props, label: "Detalhes", onClick: detalhes})}}},
     detailUser: {label: "Detail",  composite: {name: {label: "Nome completo", renderFunc: IconLabel, style: {icon: PersonIcon}}, email: "email"}, hideDesktop: true, style:{size: 'minmax(280px,1fr)'}}
 }
-
+const limitPage = 5;
 console.log(users.length);
 const userMapped = users.map(user=>(({id, name, email})=>({id, name, firstName: name.split(" ")[0], lastName: name.split(" ")[1], email}))(user));
 console.log("users:",userMapped);
 
 class HomePage extends React.Component {
+
+
+    constructor(props){
+        super(props);
+        this.state={
+            displayUsers: []
+
+        };
+    }
     componentDidMount() {
         // Force an update of the dom on prop changes
         // This is just for development situations so
@@ -59,10 +70,10 @@ class HomePage extends React.Component {
             this.forceUpdate();
         })
         console.log("CONFIG", Koji.config);
-        fetch(`${Koji.config.serviceMap.backend}/users`)
+        fetch(`${Koji.config.serviceMap.backend}/users?_start=0&_limit=5`)
         .then((response) => response.json())
-        .then((user) => {
-            console.log("USERS", user);
+        .then((users) => {
+            this.setState({displayUsers: processDataUsers(users)});
         })
         .catch(err => {
             console.log('Fetch Error: ', err);
@@ -73,7 +84,7 @@ class HomePage extends React.Component {
         return (
             <Container>
             
-            <DatatableResponsive columns={columns} data={userMapped}/>
+            <DatatableResponsive columns={columns} data={this.state.displayUsers}/>
             
             </Container>
         );
