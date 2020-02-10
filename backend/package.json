@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "prestart": "koji-vcc watch &",
-    "start": "hotel run 'json-server --watch db.json --port 3001 --host 0.0.0.0' &",
-    "dev": "hotel run 'json-server --watch db.json --port 3001 --host 0.0.0.0' &",
+    "start": "hotel run 'json-server --watch db.json --port 3001 --host 0.0.0.0'",
+    "dev": "hotel run 'json-server --watch db.json --port 3001 --host 0.0.0.0'",
     "test": "echo Test"
   },
   "author": "higoramp",
