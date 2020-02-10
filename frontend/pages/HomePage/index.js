@@ -6,7 +6,7 @@ import IconLabel from '../../components/IconLabel.js';
 
 import {MailIcon, PersonIcon} from '../../components/MyIcons.js';
 
-import DatatableResponsive from '../../components/DatatableResponsive.js';
+import DatatableResponsive, {LazyDataFetch} from '../../components/DatatableResponsive.js';
 
 import Button from '../../components/Button.js';
 
@@ -65,21 +65,15 @@ class HomePage extends React.Component {
     componentDidMount() {
 
         console.log("CONFIG", Koji.config);
-        fetch(`${Koji.config.serviceMap.backend}/users`)
-        .then((response) => response.json())
-        .then((users) => {
-            this.setState({displayUsers: processDataUsers(users)});
-        })
-        .catch(err => {
-            console.log('Fetch Error: ', err);
-        });
     }
 
     render() {
+        
+        console.log("RENDER INDEX");
         return (
             <Container>
             
-            <DatatableResponsive limit={5} columns={columns} data={this.state.displayUsers}/>
+            <DatatableResponsive limit={5} columns={columns} data={new LazyDataFetch(`${Koji.config.serviceMap.backend}/users`)}/>
             
             </Container>
         );
