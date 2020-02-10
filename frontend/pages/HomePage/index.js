@@ -61,6 +61,7 @@ class HomePage extends React.Component {
             displayUsers: []
 
         };
+        this.lazyData= new LazyDataFetch(`${Koji.config.serviceMap.backend}/users`);
     }
     componentDidMount() {
 
@@ -73,7 +74,7 @@ class HomePage extends React.Component {
         return (
             <Container>
             
-            <DatatableResponsive limit={5} columns={columns} data={new LazyDataFetch(`${Koji.config.serviceMap.backend}/users`)}/>
+            <DatatableResponsive limit={5} columns={columns} data={this.lazyData}/>
             
             </Container>
         );
