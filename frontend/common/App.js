@@ -25,6 +25,7 @@ import Koji from '@withkoji/vcc';
 const Container = styled.div`
     padding: 0;
     margin: 0;
+    overflow: hidden;
 `;
 
 class App extends React.PureComponent {

@@ -14,8 +14,12 @@
       "type": "dynamic",
       "commands": [
         "cd backend",
+        "echo teeeeeeeeeete",
+        "echo $process.env.PORT",
+        "echo $PORT", 
         "npm install",
-        "npm start"
+        "export NODE_ENV=production"
+        
       ]
     }
   }
