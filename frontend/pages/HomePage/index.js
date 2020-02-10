@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import Koji from 'koji-tools';
+import Koji from '@withkoji/vcc';
 
 import IconLabel from '../../components/IconLabel.js';
 
@@ -58,6 +58,15 @@ class HomePage extends React.Component {
         Koji.on('change', () => {
             this.forceUpdate();
         })
+        console.log("CONFIG", Koji.config);
+        fetch(`${Koji.config.serviceMap.backend}/users`)
+        .then((response) => response.json())
+        .then((user) => {
+            console.log("USERS", user);
+        })
+        .catch(err => {
+            console.log('Fetch Error: ', err);
+        });
     }
 
     render() {

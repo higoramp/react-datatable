@@ -4,13 +4,13 @@
   "description": "Backend that runs koji-react-oauth template",
   "main": "src/index.js",
   "scripts": {
-    "prestart": "koji-tools watch &",
+    "prestart": "koji-vcc watch &",
     "start": "hotel run 'json-server --watch db.json --port 3001 --host 0.0.0.0'",
     "dev": "NODE_ENV=development nodemon src/index.js",
     "test": "echo Test"
   },
-  "author": "kumar_abhirup",
-  "license": "MIT",
+  "author": "higoramp",
+  "license": "",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "body-parser": "^1.19.0",
