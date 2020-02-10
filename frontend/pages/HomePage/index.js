@@ -29,7 +29,7 @@ const Container = styled.div`
       padding: 20px 100px;
     }
     text-align: center;
-    background-color: #00796B;
+    background-color: #5f7774;
 
 `;
 
