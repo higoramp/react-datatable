@@ -11,7 +11,7 @@
     },
     "backend": {
       "output": "backend",
-      "type": "static",
+      "type": "dynamic",
       "commands": [
         "cd backend",
         "npm install",

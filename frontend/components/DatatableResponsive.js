@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import './style.css';
 
@@ -35,12 +35,20 @@ const ButtonPage = styled.button`
     color: white;
     transition: all 0.5;
 }
-
-&:hover{
+&.selected {
+  transform: scale(0.9);
+  box-shadow: none;
+  color: #333;
+  box-shadow: inset 0px 0px 10px #33333370;
+}
+&.disabled {
+  opacity: 0.2;
+}
+&:not(.disabled):hover{
   transform: scale(1.1);
 }
 
-&:active {
+&:not(.disabled):active {
   transform: scale(0.9);
 }
 `
@@ -99,6 +107,9 @@ const TableHeader = styled(TableRow)`
 
 `
 
+
+
+
 function DatatableResponsive(props) {
 
   const [page, setPage] = useState(0);
@@ -111,6 +122,7 @@ function DatatableResponsive(props) {
   let start=page*limit;
   let end =(page+1)*limit;
 
+  
   return (
     <Table>
     
@@ -159,7 +171,7 @@ function DatatableResponsive(props) {
             
         })}
     </TableBody>
-    <NavigatorPages npages={4}></NavigatorPages>
+    <NavigatorPages npages={4} onClick={(page)=>setPage(page)}></NavigatorPages>
     </Table>
   );
 }
@@ -182,12 +194,34 @@ function DefaultTableElement(props){
 
 function NavigatorPages (props){
   let buttons = [];
+  const [selected, setSelected] = useState(0);
+  useEffect(()=>{
+    props.onClick(selected);
+  });
 
   for (let i=0;i<props.npages;i++){
-    buttons.push((<ButtonPage>{i+1}</ButtonPage>));
+    buttons.push((<ButtonPage className={selected==i?'selected':''} onClick={(event)=>changePage(i)}>{i+1}</ButtonPage>));
   }
 
-  return (<NavigatorPagesStyle><ButtonPage>{"<"}</ButtonPage>{buttons}<ButtonPage>{">"}</ButtonPage></NavigatorPagesStyle>);
+  function changePage(newPage){
+    switch (newPage){
+      case "next":
+        setSelected((selected<(props.npages-1)?selected+1:selected));
+        console.log("NEEEXT");
+      break;
+      case "previous":
+        setSelected(selected>0?(selected-1):selected);
+      break;
+      default:
+        setSelected(newPage);
+    }
+  }
+
+  return (<NavigatorPagesStyle>
+    <ButtonPage className={selected<=0?'disabled':''} onClick={(event)=>changePage("previous")}>{"<"}</ButtonPage>{buttons}
+    <ButtonPage className={selected>=(props.npages-1)?'disabled':''} onClick={(event)=>changePage("next")}>{">"}</ButtonPage>
+  </NavigatorPagesStyle>);
 }
+
 
 export default DatatableResponsive;
