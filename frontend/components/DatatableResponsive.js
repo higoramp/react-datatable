@@ -74,6 +74,8 @@ const TableHeader = styled(TableRow)`
 
 function DatatableResponsive(props) {
 
+  const {page, setPage}= useState(0);
+  
   //getting the key values of columns
   let columnsKeys = Object.keys(props.columns);
   let columnsStyles = Object.entries(props.columns).map(elem=>(({ hideMobile, hideDesktop, style }) => ({ hideMobile, hideDesktop, style: style||{}}))(elem[1]));
