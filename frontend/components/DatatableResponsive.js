@@ -125,7 +125,7 @@ function DatatableResponsive(props) {
   const [page, setPage] = useState(0);
   const [limit, setLimit] = useState(props.limit||10);
   const [data, setData] = useState([]);
-  const [order, setOrder] = useState({by: (props.orderby||"name"), asc: true});
+  const [order, setOrder] = useState({by: (props.orderby||"id"), asc: true});
 
   //pegando as chaves das colunas
   let columnsKeys = Object.keys(props.columns);
@@ -138,24 +138,30 @@ function DatatableResponsive(props) {
 
   let patternLabel = props.patternLabel ||"Showing ${start+1} of ${end} of ${length} results";
 
-  //Criando uma promessa para tratar tanto listas normais, como a LazyList da mesma maneira
-  useEffect(()=>{
-      console.log("DATA PROPS", props.data.data);
+  function atualizaData(){
       Promise.resolve(props.data.slice(start, end)).then((dataLoaded)=>{
         console.log("SET DATA", dataLoaded);
         setData(dataLoaded);
     });
+  }
+  //Criando uma promessa para tratar tanto listas normais, como a LazyList da mesma maneira
+  useEffect(()=>{
+      console.log("DATA PROPS", props.data.data);
+    atualizaData();
   }, [page])
 
   useEffect(()=>{
     console.log("DATA PROPS", order);
     props.data.sort(order.by, order.asc);
+    atualizaData();
   }, [order]);
   
+
+  console.log("RENDER TABLE");
   return (
     <Table>
-        {props.orderBy?(<DropdownButton color="var(--label-font-color)" label="Select an order ▼" fontSize="0.7rem" actions={props.orderBy} 
-                style={{right: "0px"}}/>):''}
+        {props.orderBy?(<DropdownButton color="var(--label-font-color)" label="Select an order" fontSize="0.7rem" actions={props.orderBy} 
+                style={{right: "0px"}} onClick={(order)=>setOrder(order)}/>):''}
         <TableHeader columns={columnsStyles}>
             {columnsKeys.map((columnHeader)=>{
 
