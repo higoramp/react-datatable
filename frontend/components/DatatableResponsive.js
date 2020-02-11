@@ -208,7 +208,7 @@ function DatatableResponsive(props) {
         })}
     </TableBody>
     <TotalLabel>{eval("`"+patternLabel+"`")}</TotalLabel>
-    <NavigatorPages npages={4} onClick={(page)=>setPage(page)}></NavigatorPages>
+    <NavigatorPages npages={Math.ceil(length/limit)} onClick={(page)=>setPage(page)}></NavigatorPages>
     </Table>
   );
 }
