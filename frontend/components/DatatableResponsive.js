@@ -290,7 +290,7 @@ class LazyDataFetch {
 
     return new Promise((resolve, reject)=>{
       
-      let newStart = start;
+      let newStart = this.data.length<start?this.data.length:start;
       if (this.updateList){
           //Desconsidera o que já foi feito o fetch
           this.data=[];
