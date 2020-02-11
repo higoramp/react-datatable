@@ -2,9 +2,7 @@ import styled from 'styled-components';
 import React from 'react';
 import RowResponsive from './RowResponsive.js';
 
-
-
-
+//A Section Panel with a Header
 const SectionPanel = styled.div`
     &{
         background-color: white;
@@ -20,15 +18,12 @@ const Title = styled.span`
 `
 function Section(props){
 
-    
-
     return (
     <SectionPanel>
         <Title {...props}>{props.title}</Title>
         <hr/>
         <RowResponsive {...props}>{props.children}</RowResponsive>
     </SectionPanel>);
-
 }
 
 export default Section;

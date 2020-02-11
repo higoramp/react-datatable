@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import React from 'react';
 
 
-
-
+//A row that is responsive according with the screen size
+//Props: nColumns, nColumnLG, nColumnMD, nColumnSM and templateColumn (if template was set, the columns will use that values according with the size too)
 const Row = styled.div`
     &{
         padding: 10px;

@@ -1,4 +1,6 @@
 import React from 'react';
+
+//A simple component with a Icon at left of the label
 function IconLabel(props){
     const styleDefaultElement = {
         display: "flex",

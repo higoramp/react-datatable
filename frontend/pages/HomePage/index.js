@@ -3,17 +3,11 @@ import styled from 'styled-components';
 import Koji from '@withkoji/vcc';
 
 import IconLabel from '../../components/IconLabel.js';
-
 import {MailIcon, PersonIcon} from '../../components/MyIcons.js';
-
-import DatatableResponsive, {LazyDataFetch} from '../../components/DatatableResponsive.js';
-
+import DatatableResponsive from '../../components/DatatableResponsive.js';
+import LazyDataFetch from '../../components/LazyDataFetch.js';
 import Button from '../../components/Button.js';
-
-import DetailBox from '../../components/DetailBox.js';
-
-
-const users = require('../../data/users.json');
+import DetailBox from './DetailBox.js';
 
 import {processDataUsers} from '../../common/Utils.js';
 
