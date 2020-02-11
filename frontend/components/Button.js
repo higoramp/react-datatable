@@ -53,7 +53,7 @@ const ActionsList = styled.ul`
         text-align: center;
         max-height: 100vh;
         transition: all 1s;
-
+        text-align: end;
         
     }
  

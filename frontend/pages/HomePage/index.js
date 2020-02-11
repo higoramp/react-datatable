@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import styled from 'styled-components';
 import Koji from '@withkoji/vcc';
 
@@ -54,6 +54,7 @@ class HomePage extends React.Component {
             displayUsers: []
 
         };
+        this.detailBox = React.createRef();
         this.lazyData= new LazyDataFetch(`${Koji.config.serviceMap.backend}/users`, processDataUsers);
         this.columns={
             id: {label: "Id",  style:{ color: "var(--primary-text-color)", fontWeight: "bold", size: "minmax(0,60px)", justify: "center"}},
@@ -61,18 +62,19 @@ class HomePage extends React.Component {
             lastName: {label: "Sobrenome", hideMobile: true},
             email: {label: "Email", hideMobile: true, style: { justify: "left", size: "minmax(0, 1.5fr)", icon: MailIcon}, renderFunc: IconLabel},
             acao: {label: "Ação", hideMobile: true,  composite: {id: {style:{size: "minmax(0, 0.5fr)", color: "white"}, renderFunc: (props)=>Button({...props, label: "Detalhes", onClick: this.detalhes.bind(this)})}}},
-            detailUser: {label: "Detail",  composite: {name: {label: "Nome completo", renderFunc: IconLabel, style: {icon: PersonIcon}}, email: "email"}, hideDesktop: true, style:{size: 'minmax(280px,1fr)'}}
+            detailUser: {label: "Detail",  composite: {name: {label: "Nome completo", renderFunc: IconLabel, style: {icon: PersonIcon}}, email: "email"},
+            hideDesktop: true, style:{size: 'minmax(280px,1fr)'}, onClick: this.detalhes.bind(this) }
         }
 
-        this.detailBox = React.createRef();
+        
     }
 
     detalhes(id){
-      console.log("CALLBACK", this.detailBox.current);
+      this.showDetail();
+      this.setUser(this.lazyData.data.filter((item)=>item.id==id)[0]);
     }
 
     componentDidMount() {
-
         console.log("CONFIG", Koji.config);
     }
 
@@ -80,13 +82,13 @@ class HomePage extends React.Component {
         
         console.log("RENDER INDEX");
         return (
-            <Container>
+            <Container >
             
-            <DatatableResponsive limit={5} columns={this.columns} data={this.lazyData} patternLabel="Mostrando de ${start+1} até ${end} de ${length} usuários "
+            <DatatableResponsive  limit={5} columns={this.columns} data={this.lazyData} patternLabel="Mostrando de ${start+1} até ${end} de ${length} usuários "
                 orderBy={[{value: {by: "id", asc: true}, label:"Id crescente"}, {value: {by: "name", asc: true}, label:"Nome crescente"}]}
             />
             
-            <DetailBox ref={this.detailBox} user={users[0]}/>
+            <DetailBox  refs={(show, hide, setUser)=>{this.showDetail= show; this.hideDetail= hide; this.setUser = setUser;}} user={users[0]}/>
             </Container>
         );
     }

@@ -126,7 +126,6 @@ function DatatableResponsive(props) {
   const [limit, setLimit] = useState(props.limit||10);
   const [data, setData] = useState([]);
   const [order, setOrder] = useState({by: (props.orderby||"id"), asc: true});
-  const detailBox = useRef();
 
   //pegando as chaves das colunas
   let columnsKeys = Object.keys(props.columns);
@@ -189,7 +188,7 @@ function DatatableResponsive(props) {
                   let columnDefinition = props.columns[columnHeader];
                   //Se não for composta, renderiza apenas ela mesma
                   let columnsRender= columnDefinition.composite || {[columnHeader]: props.columns[columnHeader]}; //Poderia usar Object destruction tbm (({})=>({[columnHeader]}))(props.columns), mas desse outro jeito é mais fácil de ler
-                    return (<ConditionalDisplayWrapper hideMobile={columnDefinition.hideMobile} hideDesktop={columnDefinition.hideDesktop} key={columnHeader}>
+                    return (<ConditionalDisplayWrapper onClick={columnDefinition.onClick?((event)=>columnDefinition.onClick(item.id)):''} hideMobile={columnDefinition.hideMobile} hideDesktop={columnDefinition.hideDesktop} key={columnHeader}>
                     {            
                         Object.keys(columnsRender).map((columnKey)=>{
                             //verifica se foi passado um nome de outra coluna ou a propria definição de uma columna
