@@ -11,6 +11,7 @@ const BoxPanel = styled.div`
         padding: 15px;
         background-color: white;
         position: ${(props)=> props.position||'unset'};
+        border-radius: 5px;
     }
 `
 
