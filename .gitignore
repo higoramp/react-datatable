@@ -2,6 +2,7 @@
 .vscode/
 .env
 node_modules/
+*/node_modules/*
 .remy/
 build
 .DS_Store
