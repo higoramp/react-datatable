@@ -1,67 +1,107 @@
-# Koji React OAuth Scaffold
-Welcome to your new Koji React OAuth Project! 🎉
-<br />
-Use this scaffold <b>if you want to build a small app in less time</b> that needs user to sign in with the help of Google and Facebook.
 
-> **NOTE:** This scaffold needs a lot of API KEYS to start and get things working properly. So, please read the documentation carefully. Without API keys, **the application will throw runtime errors in the console.**
+# Projeto teste para a empresa Inco Investimentos
 
-## Run Frontend
+
+## O objetivo do teste
+Desenvolver uma webapp utilizando ReactJs como tecnologia e que tenha as seguintes funcionalidades:
+
+* Receber dados de um endpoint REST e renderizar uma lista com as seguintes colunas: | Id | Nome | Sobrenome | Email | Idade | Ações | Obs.: Na coluna ações deve conter um botão.
+* Implementar ordenação por id e/ou idade.
+* Implementar paginação através dos parametros de URL _start e _end do endpoint REST com 5 itens por página.
+* Fazer com que seja possível visualizar uma página com mais informações do usuário ao clicar no botão da coluna "Ações".
+## Sobre o trabalho realizado
+
+O foco do trabalho foi na criação de Componentes reutilizáveis e que sejam responsivos, tornando a experiência do usuário a melhor possível, seja no computador, tablet ou celular. 
+
+## Deploy do projeto
+
+### Frontend
 ```
-$ cd frontend
-$ npm i
-$ npm start
+npm install
+npm start
 ```
 
-## Run Backend
+### Backend
 ```
-$ cd backend
-$ npm i
-$ npm start # for production
-$ npm run dev # for development
+npm install
+npm start
 ```
 
-## Where to go
-1. Your Frontend code is located at `/frontend/pages` and there is an example page at [HomePage](#~/frontend/pages/HomePage/index.js)
-2. Your Backend API code is located at `/backend/src/routes` and the entrypoint for the backend is `/backend/src/index.js`.
-3. 3 Visual Customization Controls (VCCs) have been added to the template. These can be quickly modified to your applicaiton.
-    - [Colors](#~/.koji/customization/colors.json!visual) - Change the text color, background color, & link text color.
-    - [Images](#~/.koji/customization/images.json!visual) - Change the spinning icon.
-    - [Strings](#~/.koji/customization/strings.json!visual) - Change the page content text & link text.
-4. `.sample.env` file is provided. Rename it to `.env` and fill the credentials asked.
+## Demonstração
 
-## Steps to make this scaffold work
+https://frontend-1ea2f790-5776-46ae-ae44-7fd01f3e91bf.koji-apps.com/
 
-1. Sign up on [Stein](https://steinhq.com).
-2. Clone [this Google Spreadsheet](https://docs.google.com/spreadsheets/d/1J8dszZEeAuY0eL8XBRrKJ4Z-vPnv4JVerRcsTIbdIq0/edit?usp=sharing) on your account. Let the sheet name be `User`
-3. Go to Stein dashboard, paste your Google Spreadsheet link.
-4. Copy the API Link that Stein provides. Add authentication credentials for a secure database.
-5. `/backend/.sample.env` file is provided. Rename it to `.env`.
-6. Make `STEIN_STORE` env variable equal to the API Link provided by Stein.
-7. If you added Stein Authentication, make sure you fill in the `STEIN_STORE_USERNAME` and `STEIN_STORE_PASSWORD`.
+## Exemplo de uso do componente da Tabela Responsiva
 
-**So now, you have successfully connected to the database!** Now it is the time to **set up Facebook** and Google Developer App.
+```js
+import  DatatableResponsive  from  'DatatableResponsive';
 
-8. Visit [https://developers.facebook.com](https://developers.facebook.com) and create a new App. Name it anything.
-9. Copy the FB App Id and FB App Secret. [Learn more](https://developers.facebook.com/docs)
-10. Change the `fbAppId` string in the Koji VCC to the FB App Id. Also keep the FB App Id equal to the `FB_APP_ID` env variable.
-11. Go to Facebook Login > Settings and change `Valid OAuth Redirect URIs` to `http://localhost:8080`, `http://localhost:3001` and `https://frontend-<REMIXED_PROJECT_ID>.withkoji.com`.
-12. Keep the FB App Secret equal to the `FB_APP_SECRET` env variable.
+const columns = {
+id: {
+	label: "Id",
+	style:{
+		fontWeight: "bold",
+		size: "minmax(0,60px)",
+	}
+},
+firstName: {label: "Nome", hideMobile: true},
+lastName: {label: "Sobrenome", hideMobile: true},
+detailUser: {
+	label: "Detail",
+	composite: {
+		name: {label: "Nome completo", renderFunc: IconLabel, style: {icon: PersonIcon}},
+		email: "email"
+		},
+	hideDesktop: true, style:{size: 'minmax(280px,1fr)'}, onClick: this.detalhes.bind(this) }
+};
 
-**Now that you have setup Facebook OAuth, time to setup the Google OAuth!**
+const data = [
+  {"id": 1, "name": "Leanne Graham", "username": "Bret", "email": "Sincere@april.biz"},
+  {"id": 2, "name": "Ervin Howell", "username": "Antonette", "email": "Shanna@melissa.tv"}
+];
 
-13. Go to [https://console.developers.google.com](https://console.developers.google.com) and create a new app, name it anything.
-14. Click Credentials tab from the Sidebar. > Click `Create Credentials` > `OAuth client ID`. Also fill in the consent screen information.
-15. Copy the Google Client Id and Google Client Secret.
-16. Set the `Authorised JavaScript origins` to `http://localhost:8080`, `http://localhost:3001` and `https://frontend-<REMIXED_PROJECT_ID>.withkoji.com`.
-17. Change the `googleClientId` string in the Koji VCC to the Google Client Id. Also keep the Google Client Id equal to the `GOOGLE_CLIENT_ID` env variable.
-18. Keep the Google Client Secret equal to the `GOOGLE_ACCESS_KEY` env variable.
+React.render(<DatatableResponsive limit={5} columns={columns} data={data}/>);
+```
+##  Componentes desenvolvidos
 
-I understand that was quite a lengthy process. But, now it's all set up!
+* Box
+* Button, DropdownButton
+* [DatatableResponsive](#DatatableResponsive), TableRow, DefaultTableElement
+* IconLabel
+* LazyDataFetch
+* RowResponsive
+* Section
 
-## Any Questions?
 
-Join our [Koji Discord Server](https://discord.gg/eQuMJF6) for any software questions or bugs regarding this template.
-<br />
-Any ideas/issues can be DM'ed to [the template creator](https://twitter.com/kumar_abhirup).
-<br />
-Shoot your Pull Request and Bug reports on the official [GitHub repository](https://github.com/KumarAbhirup/Koji-React-OAuth-Scaffold).
+## DatatableResponsive
+Tabela criada com o objetivo de ser responsiva. Apresentar ao usuário o máximo de informações independente do tipo de dispositivo.
+
+### Propriedades do DatatableResponsive
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| limit | Number | 10| Limita a quantidade de itens por página|
+| orderby | Object| {by: "id", asc: true}| Ordem que será mostrado os resultados. Objeto contendo atributo **by**(String) e **asc**(boolean)|
+| columns | Object| | Descrição das colunas, conforme exemplo|
+| data | List `|` LazyDataFetch| | Dados a serem apresentados na tabela|
+| patternLabel | String |Showing ${start+1} of ${end} of ${length} results | Template string para mostrar o total de resultados e qual está sendo mostrado. Parâmetros que podem ser utilizados: **start, end e length**|
+
+### Parâmetros CSS
+
+| Name | Default | Description |
+| --- | --- | --- |
+| --divider-color | #CCCCCC50 | Cor usada para as linhas de divisão da tabela |
+| --label-font-size | 1rem | Tamanho da fonte para os labels na tabela |
+| --label-font-color |#FFFFFF | Cor da fonte para os labels na tabela |
+
+
+## Propriedades das colunas
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| label | String | **Obrigatório** | String que aparecerá no Header da coluna |
+| style | Objeto |  | Objeto descrevendo o estilo da coluna, mesmo formato do CSS, com camelcase no lugar do híphen |
+| hideMobile | Boolean | false| Indica se a coluna deve aparecer ou não em telas menores |
+| hideDesktop | Boolean | false | Indica se a coluna deve aparecer ou não em telas maiores |
+| renderFunc | Function | DefaultTableElement | Função que irá renderizar cada elemento da coluna |
+| composite | Objeto | | Uma coluna também pode ser composta por mais de um atributo, para isso deve-se passar ou o nome do atributo (caso já possua uma coluna, ou a definição desse novo atributo). Veja o exemplo acima |
