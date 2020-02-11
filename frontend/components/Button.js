@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
 
+//A Normal Button and a Dropdown Button
+
 const ButtonStyle = styled.div`
     &{
         display: inline-block;
@@ -20,7 +22,6 @@ const ButtonStyle = styled.div`
         box-shadow: none;
         
     }
-
 `
 const DropWrapper = styled.div`
     &{
@@ -35,8 +36,6 @@ const DropWrapper = styled.div`
     .dropdown-list.hide{
         display: none;
     }
-    
-    
 
 `
 const ActionsList = styled.ul`
@@ -82,7 +81,6 @@ function Button(props){
         fontSize: props.fontSize
     }
     
-
     return (<ButtonStyle key={props.value} className={props.className} onClick={(event)=>props.onClick(props.value)} style={styleButton}>{props.label}</ButtonStyle>);
 
 }

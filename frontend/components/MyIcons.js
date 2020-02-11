@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+//All my svg icons used on project
 const MailIcon = () => 
   <svg
     width="25px"
