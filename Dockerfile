@@ -1,4 +1,3 @@
-
 FROM node:10
 
 # Create app directory
@@ -12,5 +11,5 @@ COPY . .
 RUN npm install --prefix frontend
 RUN npm install --prefix backend
 
-# Start remy
+# Start backend and frontend
 CMD ./startAll.sh
