@@ -41,7 +41,7 @@ class HomePage extends React.Component {
 
         };
         this.detailBox = React.createRef();
-        this.lazyData= new LazyDataFetch(`${Koji.config.serviceMap.backend}/users`, processDataUsers);
+        this.lazyData= new LazyDataFetch(`${Koji.config.serviceMap.backend||"http://localhost:3001"}/users`, processDataUsers);
     
         this.columns={
             id: {label: "Id",  style:{ color: "var(--primary-text-color)", fontWeight: "bold", size: "minmax(0,60px)", justify: "center"}},
