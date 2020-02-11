@@ -50,7 +50,7 @@ const styleLabelIcon = {
 
 function DetailBox(props){
     const [visible, setVisible] = useState(false);
-    const [user, setUser] = useState(props.user);
+    const [user, setUser] = useState(props.user||{company:{}});//Init a blank user
 
     function showDetailBox(){
         setVisible(true);

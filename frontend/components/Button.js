@@ -83,7 +83,7 @@ function Button(props){
     }
     
 
-    return (<ButtonStyle className={props.className} onClick={(event)=>props.onClick(props.value)} style={styleButton}>{props.label}</ButtonStyle>);
+    return (<ButtonStyle key={props.value} className={props.className} onClick={(event)=>props.onClick(props.value)} style={styleButton}>{props.label}</ButtonStyle>);
 
 }
 
@@ -102,7 +102,7 @@ function DropdownButton(props){
         <Button className="button-dropdown" onClick={open} label={(selected?selected:props.label)+" ▼"} color={props.color} fontSize={props.fontSize}/>
         <ActionsList className={(show?'':'hide')+" dropdown-list"}>
         {actions.map((action)=>{
-            return (<li><a onClick={(event)=>{
+            return (<li key={action.label}><a onClick={(event)=>{
                     showDropdown(false);
                     setSelected(action.label);
                     return props.onClick(action.value);

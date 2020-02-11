@@ -37,16 +37,8 @@ const Container = styled.div`
 `;
 
 
-
-
-const limitPage = 5;
-console.log(users.length);
-const userMapped = users.map(user=>(({id, name, email})=>({id, name, firstName: name.split(" ")[0], lastName: name.split(" ")[1], email}))(user));
-console.log("users:",userMapped);
-
 class HomePage extends React.Component {
   
-    
 
     constructor(props){
         super(props);
@@ -56,6 +48,7 @@ class HomePage extends React.Component {
         };
         this.detailBox = React.createRef();
         this.lazyData= new LazyDataFetch(`${Koji.config.serviceMap.backend}/users`, processDataUsers);
+    
         this.columns={
             id: {label: "Id",  style:{ color: "var(--primary-text-color)", fontWeight: "bold", size: "minmax(0,60px)", justify: "center"}},
             firstName: {label: "Nome", hideMobile: true},
@@ -74,13 +67,8 @@ class HomePage extends React.Component {
       this.setUser(this.lazyData.data.filter((item)=>item.id==id)[0]);
     }
 
-    componentDidMount() {
-        console.log("CONFIG", Koji.config);
-    }
-
     render() {
         
-        console.log("RENDER INDEX");
         return (
             <Container >
             
@@ -88,7 +76,7 @@ class HomePage extends React.Component {
                 orderBy={[{value: {by: "id", asc: true}, label:"Id crescente"}, {value: {by: "name", asc: true}, label:"Nome crescente"}]}
             />
             
-            <DetailBox  refs={(show, hide, setUser)=>{this.showDetail= show; this.hideDetail= hide; this.setUser = setUser;}} user={users[0]}/>
+            <DetailBox  refs={(show, hide, setUser)=>{this.showDetail= show; this.hideDetail= hide; this.setUser = setUser;}}  />
             </Container>
         );
     }

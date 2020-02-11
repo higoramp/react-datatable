@@ -146,18 +146,15 @@ function DatatableResponsive(props) {
   }
   //Criando uma promessa para tratar tanto listas normais, como a LazyList da mesma maneira
   useEffect(()=>{
-      console.log("DATA PROPS", props.data.data);
     atualizaData();
   }, [page])
 
   useEffect(()=>{
-    console.log("DATA PROPS", order);
     props.data.sort(order.by, order.asc);
     atualizaData();
   }, [order]);
   
 
-  console.log("RENDER TABLE");
   return (
     <Table>
         {props.orderBy?(<DropdownButton color="var(--label-font-color)" label="Select an order" fontSize="0.7rem" actions={props.orderBy} 
@@ -188,12 +185,11 @@ function DatatableResponsive(props) {
                   let columnDefinition = props.columns[columnHeader];
                   //Se não for composta, renderiza apenas ela mesma
                   let columnsRender= columnDefinition.composite || {[columnHeader]: props.columns[columnHeader]}; //Poderia usar Object destruction tbm (({})=>({[columnHeader]}))(props.columns), mas desse outro jeito é mais fácil de ler
-                    return (<ConditionalDisplayWrapper onClick={columnDefinition.onClick?((event)=>columnDefinition.onClick(item.id)):''} hideMobile={columnDefinition.hideMobile} hideDesktop={columnDefinition.hideDesktop} key={columnHeader}>
+                    return (<ConditionalDisplayWrapper onClick={columnDefinition.onClick?((event)=>columnDefinition.onClick(item.id)):null} hideMobile={columnDefinition.hideMobile} hideDesktop={columnDefinition.hideDesktop} key={columnHeader}>
                     {            
                         Object.keys(columnsRender).map((columnKey)=>{
                             //verifica se foi passado um nome de outra coluna ou a propria definição de uma columna
                             let columnObj = props.columns[columnsRender[columnKey]]||columnsRender[columnKey];
-                            console.log("RENDER", columnKey);
                             //Se não f=possuir uma função para renderização, usa o Elemento padrão    
                             let renderFunc= columnObj.renderFunc|| DefaultTableElement;
                             return renderFunc({value: item[columnKey], ...columnObj.style, ...item[columnKey]});   
@@ -237,14 +233,13 @@ function NavigatorPages (props){
   });
 
   for (let i=0;i<props.npages;i++){
-    buttons.push((<ButtonPage className={selected==i?'selected':''} onClick={(event)=>changePage(i)}>{i+1}</ButtonPage>));
+    buttons.push((<ButtonPage key={i} className={selected==i?'selected':''} onClick={(event)=>changePage(i)}>{i+1}</ButtonPage>));
   }
 
   function changePage(newPage){
     switch (newPage){
       case "next":
         setSelected((selected<(props.npages-1)?selected+1:selected));
-        console.log("NEEEXT");
       break;
       case "previous":
         setSelected(selected>0?(selected-1):selected);
@@ -306,9 +301,7 @@ class LazyDataFetch {
             this.length=response.headers.get("x-total-count");
             return response.json();})
           .then((users) => {
-              console.log("DATA ANTES", this.data);
 		    this.data.splice(newStart, (end-newStart), ...this.processData(users));
-            console.log("DATA", this.data);
             return resolve(this.data.slice(start, end));//Retorna apenas o que foi pedido
           })
           .catch(err => {
