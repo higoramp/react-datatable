@@ -16,6 +16,7 @@
         "cd backend",
         "npm install",
         "export NODE_ENV=production",
+        "echo teeeeeeeeeete",
         "echo $process.env.PORT",
         "echo $PORT"
       ]
