@@ -15,13 +15,24 @@ O foco do trabalho foi na criação de Componentes reutilizáveis e que sejam re
 
 ## Deploy do projeto
 
-### Frontend
+### Com Docker
+```
+docker build -t inco .
+docker run -p 3001:3001 -p 8080:8080 inco
+npm start
+```
+Acesse http://localhost:8080/
+
+
+### Sem docker
+
+#### Frontend
 ```
 npm install
 npm start
 ```
 
-### Backend
+#### Backend
 ```
 npm install
 npm start

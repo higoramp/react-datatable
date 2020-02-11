@@ -13,4 +13,4 @@ RUN npm install --prefix frontend
 RUN npm install --prefix backend
 
 # Start remy
-CMD npm start --prefix frontend
+CMD ./startAll.sh
